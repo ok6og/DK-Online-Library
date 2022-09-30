@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DK_Project.Models.Models
+{
+    public class Book
+    {
+        public int Id { get; init; }
+        public string Title { get; init; }
+        public int AuthorId { get; init; }
+    }
+}
