@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DK_Project.Models.Models;
+using DK_Project.Models.Requests;
 
 namespace BookStore.BL.Interfaces
 {
@@ -14,5 +15,6 @@ namespace BookStore.BL.Interfaces
         IEnumerable<Author> GetAllUsers();
         Author? GetById(int id);
         Author UpdateUser(Author user);
+        Author GetAuthorByName(string name);
     }
 }

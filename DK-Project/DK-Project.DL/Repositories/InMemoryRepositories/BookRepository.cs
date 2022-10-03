@@ -37,7 +37,16 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         }
         public Book? AddBook(Book book)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _books.Add(book);
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return book;
         }
 
         public Book? DeleteBook(int bookId)
@@ -68,6 +77,12 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             _books.Add(book);
 
             return book;
+        }
+
+        public Book GetBookByName(string book)
+        {
+            var existingBook = _books.FirstOrDefault(x => x.Title == book);
+            return existingBook;
         }
     }
 }

@@ -14,5 +14,7 @@ namespace DK_Project.DL.Interfaces
         IEnumerable<Book> GetAllBooks();
         Book? GetById(int id);
         Book UpdateBook(Book user);
+        Book GetBookByName(string book);
+
     }
 }

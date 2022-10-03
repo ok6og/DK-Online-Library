@@ -14,5 +14,6 @@ namespace DK_Project.DL.Interfaces
         IEnumerable<Author> GetAllUsers();
         Author? GetById(int id);
         Author UpdateUser(Author user);
+        Author GetAuthorByName(string user);
     }
 }

@@ -43,5 +43,9 @@ namespace BookStore.BL.Services
         {
             return _bookRepository.UpdateBook(book);
         }
+        public Book GetBookByName(string book)
+        {
+            return _bookRepository.GetBookByName(book);
+        }
     }
 }

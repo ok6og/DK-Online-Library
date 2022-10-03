@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BookStore.BL.Interfaces;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.Models.Models;
+using DK_Project.Models.Requests;
 
 namespace BookStore.BL.Services
 {
@@ -21,6 +23,14 @@ namespace BookStore.BL.Services
 
         public Author? AddUser(Author user)
         {
+            //Make it with Request and automapper
+            //var author = _authorRepository.GetAuthorByName(user.Name);
+            //if (author != null)
+            //{
+            //    return null;
+            //} 
+            //var author1 = _mapper.Map<Author>(user);
+
             return _authorRepository.AddUser(user);
         }
 
@@ -42,6 +52,10 @@ namespace BookStore.BL.Services
         public Author UpdateUser(Author user)
         {
             return _authorRepository.UpdateUser(user);
+        }
+        public Author GetAuthorByName(string user)
+        {
+            return _authorRepository.GetAuthorByName(user);
         }
     }
 }
