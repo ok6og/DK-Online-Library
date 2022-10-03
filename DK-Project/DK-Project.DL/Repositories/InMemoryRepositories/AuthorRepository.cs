@@ -40,7 +40,7 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         public Author? AddUser(Author user)
         {
             try
-            {
+            {              
                 _users.Add(user);
 
             }
@@ -79,6 +79,12 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             _users.Add(user);
 
             return user;
+        }
+
+        public Author GetAuthorByName(string user)
+        {
+            var existingAuthor = _users.FirstOrDefault(x => x.Name == user);
+            return existingAuthor;
         }
     }
 }

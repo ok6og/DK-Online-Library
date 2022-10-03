@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DK_Project.Models.Models
+namespace DK_Project.Models.Responses
 {
-    public record Author : Person
+    internal class AddBookResponse
     {
-        public string Nickname { get; init; }
     }
 }

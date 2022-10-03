@@ -1,6 +1,6 @@
 ﻿namespace DK_Project.Models.Models
 {
-    public class Person
+    public record Person
     {
         public int Id { get; init; }
         public string Name { get; init; }
