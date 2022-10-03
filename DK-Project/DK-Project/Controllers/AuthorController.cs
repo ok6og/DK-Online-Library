@@ -19,6 +19,7 @@ namespace DK_Project.Controllers
         private readonly IMapper _mapper;
 
 
+
         public AuthorController(IAuthorService userInMemoryRepository, ILogger<AuthorController> logger, IMapper mapper)
         {
             _authorService = userInMemoryRepository;
@@ -30,6 +31,13 @@ namespace DK_Project.Controllers
         [HttpGet("GetNamesAndId")]
         public IActionResult Get()
         {
+            _logger.LogInformation("Information Test");
+            _logger.LogWarning("Warning test");
+            _logger.LogError("Error Test");
+            _logger.LogCritical("Critical Test");
+
+
+
             return Ok(_authorService.GetAllUsers());
         }
 
@@ -85,16 +93,18 @@ namespace DK_Project.Controllers
         public IActionResult Delete(int id)
         {
             var authorExist = _authorService.GetById(id);
-            if (authorExist == null) return BadRequest("Book Doesn't Exists");
+            if (authorExist == null) return BadRequest("Author Doesn't Exists");
 
             return Ok(_authorService.DeleteUser(id));
 
         }
 
         [HttpGet("GetAuthorByName")]
-        public Author? GetAuthor(string name)
+        public IActionResult GetAuthor(string name)
         {
-            return _authorService.GetAuthorByName(name);
+            var authorByName = _authorService.GetAuthorByName(name);
+            if (authorByName == null) return BadRequest("Book Doesn't Exists");
+            return Ok(authorByName);
         }
     }
 }

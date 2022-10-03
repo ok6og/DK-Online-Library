@@ -7,16 +7,20 @@ using BookStore.BL.Interfaces;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.Models.Models;
+using Microsoft.Extensions.Logging;
 
 namespace BookStore.BL.Services
 {
     public class BookService : IBookService
     {
         public readonly IBookRepository _bookRepository;
+        private readonly ILogger<AuthorService> _logger;
 
-        public BookService(IBookRepository bookRepository)
+
+        public BookService(IBookRepository bookRepository, ILogger<AuthorService> logger)
         {
             _bookRepository = bookRepository;
+            _logger = logger;
         }
 
         public Book? AddBook(Book book)

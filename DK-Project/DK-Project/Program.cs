@@ -3,8 +3,16 @@ using BookStore.BL.Services;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.Extensions;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+
+var logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(theme:AnsiConsoleTheme.Code)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 
