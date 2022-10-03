@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DK_Project.Models.Models
 {
-    public class Author : Person
+    public record Author : Person
     {
         public string Nickname { get; init; }
     }

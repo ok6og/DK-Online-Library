@@ -27,13 +27,6 @@ namespace BookStore.BL.Services
 
         public Author? AddUser(Author user)
         {
-            //Make it with Request and automapper
-            //var author = _authorRepository.GetAuthorByName(user.Name);
-            //if (author != null)
-            //{
-            //    return null;
-            //} 
-            //var author1 = _mapper.Map<Author>(user);
             _logger.LogInformation("Adding author");
             return _authorRepository.AddUser(user);
         }
@@ -66,7 +59,6 @@ namespace BookStore.BL.Services
             {
                 _logger.LogInformation("Deleting user");
                 return null;
-
             }
         }
 
