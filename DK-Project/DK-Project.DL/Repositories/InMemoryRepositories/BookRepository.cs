@@ -44,8 +44,6 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         {
             if (bookId <= 0) return null;
 
-
-
             var book = _books.FirstOrDefault(x => x.Id == bookId);
             _books.Remove(book);
             return book;

@@ -17,8 +17,6 @@ namespace DK_Project.Controllers
             _logger = logger;
         }
 
-
-
         [HttpGet("GetNamesAndId")]
         public IEnumerable<Book> Get()
         {

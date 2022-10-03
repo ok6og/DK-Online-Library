@@ -55,8 +55,6 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         {
             if (userId <= 0) return null;
 
-
-
             var user = _users.FirstOrDefault(x => x.Id == userId);
             _users.Remove(user);
             return user;

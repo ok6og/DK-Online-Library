@@ -13,15 +13,11 @@ namespace DK_Project.Controllers
         private readonly IAuthorService _authorInMemoryRepository;
         private readonly ILogger<AuthorController> _logger;
 
-        
-
         public AuthorController(IAuthorService userInMemoryRepository, ILogger<AuthorController> logger)
         {
             _authorInMemoryRepository = userInMemoryRepository;
             _logger = logger;
         }
-
-
 
         [HttpGet("GetNamesAndId")]
         public IEnumerable<Author> Get()
