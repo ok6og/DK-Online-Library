@@ -9,12 +9,14 @@ namespace DK_Project.DL.Interfaces
 {
     public interface IBookRepository
     {
-        Book? AddBook(Book book);
-        Book? DeleteBook(int bookId);
-        IEnumerable<Book> GetAllBooks();
-        Book? GetById(int id);
-        Book UpdateBook(Book user);
-        Book GetBookByName(string book);
+        Task<Book?> AddBook(Book book);
+        Task<Book?> DeleteBook(int bookId);
+        Task<IEnumerable<Book>> GetAllBooks();
+        Task<Book?> GetById(int id);
+        Task<Book> UpdateBook(Book user);
+        Task<Book> GetBookByName(string book);
+        Task<IEnumerable<Book>> GetAuthorBooks(int authorId);
+        Task<bool> DoesAuthorHaveBooks(int authorId);
 
     }
 }

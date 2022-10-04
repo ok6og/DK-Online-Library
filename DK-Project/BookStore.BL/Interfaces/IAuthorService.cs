@@ -10,11 +10,12 @@ namespace BookStore.BL.Interfaces
 {
     public interface IAuthorService
     {
-        Author? AddUser(Author user);
-        Author? DeleteUser(int userId);
-        IEnumerable<Author> GetAllUsers();
-        Author? GetById(int id);
-        Author UpdateUser(Author user);
-        Author GetAuthorByName(string name);
+        Task<Author?> AddUser(Author user);
+        Task<Author?> DeleteUser(int userId);
+        Task<IEnumerable<Author>> GetAllUsers();
+        Task<Author?> GetById(int id);
+        Task<Author> UpdateUser(Author user);
+        Task<Author> GetAuthorByName(string name);
+        Task<IEnumerable<Book>> GetAuthorBooks(int authorId);
     }
 }

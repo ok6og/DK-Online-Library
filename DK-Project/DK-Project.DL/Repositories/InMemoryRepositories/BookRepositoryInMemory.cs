@@ -8,7 +8,7 @@ using DK_Project.Models.Models;
 
 namespace DK_Project.DL.Repositories.InMemoryRepositories
 {
-    public class BookRepository : IBookRepository
+    public class BookRepositoryInMemory : IBookRepository
     {
         private static List<Book> _books = new List<Book>()
         {
@@ -31,11 +31,11 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
                 AuthorId = 2
             }
         };
-        public BookRepository()
+        public BookRepositoryInMemory()
         {
 
         }
-        public Book? AddBook(Book book)
+        public async Task<Book?> AddBook(Book book)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return book;
         }
 
-        public Book? DeleteBook(int bookId)
+        public async Task<Book?> DeleteBook(int bookId)
         {
             if (bookId <= 0) return null;
 
@@ -58,17 +58,17 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return book;
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
             return _books;
         }
 
-        public Book? GetById(int id)
+        public async Task<Book?> GetById(int id)
         {
             return _books.FirstOrDefault(x => x.Id == id);
         }
 
-        public Book UpdateBook(Book book)
+        public async Task<Book> UpdateBook(Book book)
         {
             var existingBook = _books.FirstOrDefault(x => x.Id == book.Id);
             if (existingBook == null) return null;
@@ -79,10 +79,20 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return book;
         }
 
-        public Book GetBookByName(string book)
+        public async Task<Book> GetBookByName(string book)
         {
             var existingBook = _books.FirstOrDefault(x => x.Title == book);
             return existingBook;
+        }
+
+        public Task<IEnumerable<Book>> GetAuthorBooks(int authorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DoesAuthorHaveBooks(int authorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

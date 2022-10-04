@@ -9,11 +9,12 @@ namespace DK_Project.DL.Interfaces
 {
     public interface IAuthorRepository
     {
-        Author? AddUser(Author user);
-        Author? DeleteUser(int userId);
-        IEnumerable<Author> GetAllUsers();
-        Author? GetById(int id);
-        Author UpdateUser(Author user);
-        Author GetAuthorByName(string user);
+        Task<Author?> AddUser(Author user);
+        Task<Author?> DeleteUser(int userId);
+        Task<IEnumerable<Author>> GetAllUsers();
+        Task<Author?> GetById(int id);
+        Task<Author> UpdateUser(Author user);
+        Task<Author> GetAuthorByName(string user);
+        
     }
 }
