@@ -23,33 +23,33 @@ namespace BookStore.BL.Services
             _logger = logger;
         }
 
-        public Book? AddBook(Book book)
+        public async Task<Book?> AddBook(Book book)
         {
-            return _bookRepository.AddBook(book);
+            return await _bookRepository.AddBook(book);
         }
 
-        public Book? DeleteBook(int bookId)
+        public async Task<Book?> DeleteBook(int bookId)
         {
-            return _bookRepository.DeleteBook(bookId);
+            return await _bookRepository.DeleteBook(bookId);
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return _bookRepository.GetAllBooks();
+            return await _bookRepository.GetAllBooks();
         }
 
-        public Book? GetById(int id)
+        public async Task<Book?> GetById(int id)
         {
-            return _bookRepository.GetById(id);
+            return await _bookRepository.GetById(id);
         }
 
-        public Book UpdateBook(Book book)
+        public async Task<Book> UpdateBook(Book book)
         {
-            return _bookRepository.UpdateBook(book);
+            return await _bookRepository.UpdateBook(book);
         }
-        public Book GetBookByName(string book)
+        public async Task<Book> GetBookByName(string book)
         {
-            return _bookRepository.GetBookByName(book);
+            return await _bookRepository.GetBookByName(book);
         }
     }
 }

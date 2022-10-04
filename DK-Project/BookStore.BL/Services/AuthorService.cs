@@ -17,43 +17,39 @@ namespace BookStore.BL.Services
     {
         public readonly IAuthorRepository _authorRepository;
         private readonly ILogger<AuthorService> _logger;
+        public readonly IBookRepository _bookRepository;
 
 
-        public AuthorService(IAuthorRepository authorRepository, ILogger<AuthorService> logger)
+        public AuthorService(IAuthorRepository authorRepository, ILogger<AuthorService> logger, IBookRepository bookRepository)
         {
             _authorRepository = authorRepository;
             _logger = logger;
+            _bookRepository = bookRepository;
         }
 
-        public Author? AddUser(Author user)
+        public async Task<Author?> AddUser(Author user)
         {
             _logger.LogInformation("Adding author");
-            return _authorRepository.AddUser(user);
+            return await _authorRepository.AddUser(user);
         }
 
-        public Author? DeleteUser(int userId)
+        public async Task<Author?> DeleteUser(int userId)
         {
-            try
+            if (await _bookRepository.DoesAuthorHaveBooks(userId))
             {
-                _logger.LogInformation("Deleting user");
-                throw new Exception();
-                return _authorRepository.DeleteUser(userId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("You are dumb");
                 return null;
             }
+            _logger.LogInformation("Deleting user");
+            return await _authorRepository.DeleteUser(userId);
 
         }
 
-        public IEnumerable<Author> GetAllUsers()
+        public async Task<IEnumerable<Author>> GetAllUsers()
         {
             try
             {
                 _logger.LogInformation("Getting all users");
-                return _authorRepository.GetAllUsers();
-
+                return await _authorRepository.GetAllUsers();
             }
             catch (Exception ex)
             {
@@ -62,18 +58,28 @@ namespace BookStore.BL.Services
             }
         }
 
-        public Author? GetById(int id)
+        public async Task<Author?> GetById(int id)
         {
-            return _authorRepository.GetById(id);
+            return await _authorRepository.GetById(id);
         }
 
-        public Author UpdateUser(Author user)
+        public async Task<Author> UpdateUser(Author user)
         {
-            return _authorRepository.UpdateUser(user);
+            return await _authorRepository.UpdateUser(user);
         }
-        public Author GetAuthorByName(string user)
+        public async Task<Author> GetAuthorByName(string user)
         {
-            return _authorRepository.GetAuthorByName(user);
+            return await _authorRepository.GetAuthorByName(user);
+        }
+        public async Task<IEnumerable<Book>> GetAuthorBooks(int authorId)
+        { 
+            _logger.LogInformation($"Getting all author{authorId} books");
+            if (await _bookRepository.DoesAuthorHaveBooks(authorId))
+            {
+                return await _bookRepository.GetAuthorBooks(authorId);
+            }
+            _logger.LogInformation("This Author has no books");
+            return null;
         }
     }
 }

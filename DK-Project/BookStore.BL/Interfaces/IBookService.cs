@@ -9,12 +9,12 @@ namespace BookStore.BL.Interfaces
 {
     public interface IBookService
     {
-        Book? AddBook(Book book);
-        Book? DeleteBook(int bookId);
-        IEnumerable<Book> GetAllBooks();
-        Book? GetById(int id);
-        Book UpdateBook(Book user);
-        Book GetBookByName(string title);
+        Task<Book?> AddBook(Book book);
+        Task<Book?> DeleteBook(int bookId);
+        Task<IEnumerable<Book>> GetAllBooks();
+        Task<Book?> GetById(int id);
+        Task<Book> UpdateBook(Book user);
+        Task<Book> GetBookByName(string title);
 
     }
 }

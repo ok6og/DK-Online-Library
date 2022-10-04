@@ -29,7 +29,7 @@ namespace DK_Project.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetNamesAndId")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Information Test");
             _logger.LogWarning("Warning test");
@@ -38,23 +38,23 @@ namespace DK_Project.Controllers
 
 
 
-            return Ok(_authorService.GetAllUsers());
+            return  Ok( await _authorService.GetAllUsers());
         }
 
         [HttpGet("GetByID")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetByID(int Id)
+        public async Task<IActionResult> GetByID(int Id)
         {
             if (Id<=0)
             {
                 return BadRequest($"Parameter id:{Id} must be greater than 0 or 0");
             }
-            var result = _authorService.GetById(Id);
+            var result = await _authorService.GetById(Id);
             if (result == null)
             {
-                return NotFound(Id);
+                return BadRequest("Book Doesn't Exists");
             }
             return Ok(result);
 
@@ -63,47 +63,55 @@ namespace DK_Project.Controllers
         [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Add([FromBody] AddUpdateAuthorRequest authorRequest)
+        public async Task<IActionResult> Add([FromBody] AddUpdateAuthorRequest authorRequest)
         {
             if (authorRequest == null) return BadRequest(authorRequest);
-            var authorExist = _authorService.GetAuthorByName(authorRequest.Name);
+            var authorExist = await _authorService.GetAuthorByName(authorRequest.Name);
             if (authorExist != null) return BadRequest("Author Already Exists");
 
             var author = _mapper.Map<Author>(authorRequest);            
-            return Ok(_authorService.AddUser(author));
+            return Ok(await _authorService.AddUser(author));
         }
 
         [HttpPut("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] AddUpdateAuthorRequest authorRequest)
+        public async Task<IActionResult> Update([FromBody] AddUpdateAuthorRequest authorRequest)
         {
             if (authorRequest == null) return BadRequest(authorRequest);
             var authorExist = _authorService.GetById(authorRequest.Id);
-            if (authorExist == null) return BadRequest("Author Dosen't Exist");
+            if (authorExist.Result == null) return BadRequest("Author Dosen't Exist");
 
             var newAuthor = _mapper.Map<Author>(authorRequest);
-            return Ok(_authorService.UpdateUser(newAuthor));
+            return Ok(await _authorService.UpdateUser(newAuthor));
 
         }
 
         [HttpDelete("Delete")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var authorExist = _authorService.GetById(id);
+            var authorExist = await _authorService.GetById(id);
             if (authorExist == null) return BadRequest("Author Doesn't Exists");
 
-            return Ok(_authorService.DeleteUser(id));
+            return Ok(await _authorService.DeleteUser(id));
 
         }
 
         [HttpGet("GetAuthorByName")]
-        public IActionResult GetAuthor(string name)
+        public async Task<IActionResult> GetAuthor(string name)
         {
-            var authorByName = _authorService.GetAuthorByName(name);
-            if (authorByName == null) return BadRequest("Book Doesn't Exists");
+            var authorByName = await _authorService.GetAuthorByName(name);
+            if (authorByName == null) return BadRequest("Author Doesn't Exists");
+            return Ok(authorByName);
+        }
+
+        [HttpGet("GetAuthorsBooks")]
+        public async Task<IActionResult> GetAuthorBooks(int authorId)
+        {
+            var authorByName = await _authorService.GetAuthorBooks(authorId);
+            if (authorByName == null) return BadRequest("Author Doesn't Exists");
             return Ok(authorByName);
         }
     }

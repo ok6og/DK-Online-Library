@@ -8,7 +8,7 @@ using DK_Project.Models.Models;
 
 namespace DK_Project.DL.Repositories.InMemoryRepositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepositoryInMemory : IAuthorRepository
     {
         private static List<Author> _users = new List<Author>()
         {
@@ -37,7 +37,7 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
                 Nickname = "boyang"
             }
         };
-        public Author? AddUser(Author user)
+        public async Task<Author?> AddUser(Author user)
         {
             try
             {              
@@ -51,7 +51,7 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return user;
         }
 
-        public Author? DeleteUser(int userId)
+        public async Task<Author?> DeleteUser(int userId)
         {
             if (userId <= 0) return null;
 
@@ -60,17 +60,17 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return user;
         }
 
-        public IEnumerable<Author> GetAllUsers()
+        public async Task<IEnumerable<Author>> GetAllUsers()
         {
             return _users;
         }
 
-        public Author? GetById(int id)
+        public async Task<Author?> GetById(int id)
         {
             return _users.FirstOrDefault(x => x.Id == id);
         }
 
-        public Author UpdateUser(Author user)
+        public async Task<Author> UpdateUser(Author user)
         {
             var existingUser = _users.FirstOrDefault(x => x.Id == user.Id);
             if (existingUser == null) return null;
@@ -81,10 +81,15 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             return user;
         }
 
-        public Author GetAuthorByName(string user)
+        public async Task<Author> GetAuthorByName(string user)
         {
             var existingAuthor = _users.FirstOrDefault(x => x.Name == user);
             return existingAuthor;
+        }
+
+        public Task<IEnumerable<Book>> GetAuthorBooks(int authorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
