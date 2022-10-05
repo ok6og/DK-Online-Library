@@ -28,7 +28,6 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             }
         };
 
-
         public PersonRepository()
         {
  
@@ -77,7 +76,5 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             _users.Remove(user);
             return user;
         }
-
-
     }
 }

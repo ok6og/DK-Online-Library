@@ -14,18 +14,21 @@ namespace BookStore.BL.Services
     public class BookService : IBookService
     {
         public readonly IBookRepository _bookRepository;
+        public readonly IAuthorRepository _authorRepository;
         private readonly ILogger<AuthorService> _logger;
 
 
-        public BookService(IBookRepository bookRepository, ILogger<AuthorService> logger)
+        public BookService(IBookRepository bookRepository, ILogger<AuthorService> logger, IAuthorRepository authorRepository)
         {
+
             _bookRepository = bookRepository;
             _logger = logger;
+            _authorRepository = authorRepository;
         }
 
         public async Task<Book?> AddBook(Book book)
         {
-            if (!(await _bookRepository.DoesAuthorHaveBooks(book.AuthorId)))
+            if (await _authorRepository.GetById(book.AuthorId)== null)
             {
                 _logger.LogInformation("There is no such author");
                 return null;
