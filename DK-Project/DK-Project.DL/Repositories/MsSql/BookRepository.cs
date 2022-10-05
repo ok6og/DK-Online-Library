@@ -167,7 +167,7 @@ namespace DK_Project.DL.Repositories.MsSql
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in {nameof(GetAuthorBooks)}: {ex.Message}", ex);
+                _logger.LogError($"Error in {nameof(DoesAuthorHaveBooks)}: {ex.Message}", ex);
             }
             return false;
         }

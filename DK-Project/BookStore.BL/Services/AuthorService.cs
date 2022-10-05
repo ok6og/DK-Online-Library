@@ -37,25 +37,17 @@ namespace BookStore.BL.Services
         {
             if (await _bookRepository.DoesAuthorHaveBooks(userId))
             {
+                _logger.LogInformation("You cant delete an author with existing books.");
                 return null;
             }
-            _logger.LogInformation("Deleting user");
+            _logger.LogInformation("Deleting author.");
             return await _authorRepository.DeleteUser(userId);
-
         }
 
         public async Task<IEnumerable<Author>> GetAllUsers()
         {
-            try
-            {
-                _logger.LogInformation("Getting all users");
-                return await _authorRepository.GetAllUsers();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation("Deleting user");
-                return null;
-            }
+            _logger.LogInformation("Getting all authors.");
+            return await _authorRepository.GetAllUsers();
         }
 
         public async Task<Author?> GetById(int id)

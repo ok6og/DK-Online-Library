@@ -25,6 +25,11 @@ namespace BookStore.BL.Services
 
         public async Task<Book?> AddBook(Book book)
         {
+            if (!(await _bookRepository.DoesAuthorHaveBooks(book.AuthorId)))
+            {
+                _logger.LogInformation("There is no such author");
+                return null;
+            }
             return await _bookRepository.AddBook(book);
         }
 

@@ -8,8 +8,8 @@ namespace DK_Project.Validators
         public AddUpdateAuthorRequestValidator()
         {
             RuleFor(x => x.Age)
-                .GreaterThan(0).WithMessage("YOu are to old bruh")
-                .LessThanOrEqualTo(120).WithMessage("You are too young budddddddddddddddy");
+                .GreaterThan(0).WithMessage("You are too young budddddddddddddddy")
+                .LessThanOrEqualTo(120).WithMessage("YOu are to old bruh");
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .MinimumLength(2)

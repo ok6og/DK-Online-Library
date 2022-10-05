@@ -8,7 +8,7 @@ using DK_Project.Models.Models;
 
 namespace DK_Project.DL.Repositories.InMemoryRepositories
 {
-    public class AuthorRepositoryInMemory : IAuthorRepository
+    public class AuthorRepositoryInMemory
     {
         private static List<Author> _users = new List<Author>()
         {
@@ -85,11 +85,6 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         {
             var existingAuthor = _users.FirstOrDefault(x => x.Name == user);
             return existingAuthor;
-        }
-
-        public Task<IEnumerable<Book>> GetAuthorBooks(int authorId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
