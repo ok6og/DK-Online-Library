@@ -29,30 +29,25 @@ namespace DK_Project.Controllers
         [HttpGet("GetByID")]
         public Person? GetByID(int Id)
         {
-
             return _personService.GetById(Id);
-          
         }
 
         [HttpPost("Add")]
         public Person? Add([FromBody] Person user)
         {
             return _personService.AddUser(user);
-
         }
 
         [HttpPut("Update")]
         public Person? Update([FromBody] Person user)
         {
             return _personService.UpdateUser(user);
-
         }
 
         [HttpDelete("Delete")]
         public Person? Delete(int id)
         {
             return _personService.DeleteUser(id);
-
         }
     }
 }

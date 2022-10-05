@@ -131,8 +131,6 @@ namespace DK_Project.DL.Repositories.MsSql
                 _logger.LogError($"Error in {nameof(UpdateUser)}: {ex.Message}", ex);
             }
             return null;
-        }
-
-        
+        }   
     }
 }

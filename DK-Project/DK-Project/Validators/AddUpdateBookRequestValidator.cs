@@ -16,7 +16,6 @@ namespace DK_Project.Validators
                 .NotEmpty().WithMessage("Please input an AuthorId");
             RuleFor(x => x.Id)
                 .GreaterThanOrEqualTo(0).WithMessage("Input a valid Id");
-
         }
     }
 }
