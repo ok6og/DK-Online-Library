@@ -8,6 +8,6 @@ namespace DK_Project.Models.Models
 {
     public record Author : Person
     {
-        public string Nickname { get; init; }
+        public string Nickname { get; set; }
     }
 }

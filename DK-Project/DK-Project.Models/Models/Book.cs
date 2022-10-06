@@ -9,7 +9,7 @@ namespace DK_Project.Models.Models
     public class Book
     {
         public int Id { get; init; }
-        public string Title { get; init; }
+        public string Title { get; set; }
         public int AuthorId { get; init; }
         public int Quantity { get; set; }
         public DateTime LastUpdated { get; set; }

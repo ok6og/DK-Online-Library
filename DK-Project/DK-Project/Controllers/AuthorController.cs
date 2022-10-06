@@ -20,9 +20,9 @@ namespace DK_Project.Controllers
 
 
 
-        public AuthorController(IAuthorService userInMemoryRepository, ILogger<AuthorController> logger, IMapper mapper)
+        public AuthorController(IAuthorService authorService, ILogger<AuthorController> logger, IMapper mapper)
         {
-            _authorService = userInMemoryRepository;
+            _authorService = authorService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -54,7 +54,7 @@ namespace DK_Project.Controllers
             var result = await _authorService.GetById(Id);
             if (result == null)
             {
-                return BadRequest("Book Doesn't Exists");
+                return NotFound("Book Doesn't Exists");
             }
             return Ok(result);
 
@@ -79,8 +79,8 @@ namespace DK_Project.Controllers
         public async Task<IActionResult> Update([FromBody] AddUpdateAuthorRequest authorRequest)
         {
             if (authorRequest == null) return BadRequest(authorRequest);
-            var authorExist = _authorService.GetById(authorRequest.Id);
-            if (authorExist.Result == null) return BadRequest("Author Dosen't Exist");
+            var authorExist = await _authorService.GetById(authorRequest.Id);
+            if (authorExist == null) return BadRequest("Author Dosen't Exist");
 
             var newAuthor = _mapper.Map<Author>(authorRequest);
             return Ok(await _authorService.UpdateUser(newAuthor));
