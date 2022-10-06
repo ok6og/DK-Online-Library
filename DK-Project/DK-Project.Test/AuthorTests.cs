@@ -40,7 +40,6 @@ namespace DK_Project.Test
         private readonly Mock<IAuthorRepository> _authorRepoMock;
         private readonly Mock<IBookRepository> _bookRepoMock;
         private readonly Mock<ILogger<AuthorController>> _authorControllerLoggerMock;
-        //AuthorService(IAuthorRepository authorRepository, ILogger<AuthorService> logger, IBookRepository bookRepository)
         public AuthorTests()
         {
             var mockMapperConfig = new MapperConfiguration(cfg =>
@@ -63,7 +62,6 @@ namespace DK_Project.Test
             _authorRepoMock.Setup(x => x.GetAllUsers())
                 .ReturnsAsync(_authors);
             
-
             //inject
             var service = new AuthorService(_authorRepoMock.Object, _logger.Object, _bookRepoMock.Object);
             var controller = new AuthorController(service, _authorControllerLoggerMock.Object, _mapper);
@@ -113,7 +111,6 @@ namespace DK_Project.Test
             var authorId = 1;
             var expectedAuthor = _authors.First(x => x.Id == authorId);
 
-
             _authorRepoMock.Setup(x=> x.GetById(authorId))
                 .ReturnsAsync(_authors.First(x => x.Id == authorId));
 
@@ -135,9 +132,6 @@ namespace DK_Project.Test
         {
             //setup
             var authorId = 3;
-            //var expectedAuthor = _authors.First(x => x.Id == authorId);
-
-
             _authorRepoMock.Setup(x=> x.GetById(authorId))
                 .ReturnsAsync(_authors.FirstOrDefault(x => x.Id == authorId));
 
