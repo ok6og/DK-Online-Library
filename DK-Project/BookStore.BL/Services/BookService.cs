@@ -15,10 +15,10 @@ namespace BookStore.BL.Services
     {
         public readonly IBookRepository _bookRepository;
         public readonly IAuthorRepository _authorRepository;
-        private readonly ILogger<AuthorService> _logger;
+        private readonly ILogger<BookService> _logger;
 
 
-        public BookService(IBookRepository bookRepository, ILogger<AuthorService> logger, IAuthorRepository authorRepository)
+        public BookService(IBookRepository bookRepository, ILogger<BookService> logger, IAuthorRepository authorRepository)
         {
 
             _bookRepository = bookRepository;

@@ -43,7 +43,7 @@ namespace DK_Project.Controllers
             var result = await _bookService.GetById(Id);
             if (result == null)
             {
-                return NotFound(Id);
+                return NotFound("Book Doesn't Exists");
             }
             return Ok(result);
         }

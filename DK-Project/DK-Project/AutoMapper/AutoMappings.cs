@@ -9,7 +9,7 @@ namespace DK_Project.AutoMapper
     {
         public AutoMappings()
         {
-            CreateMap<AddUpdateAuthorRequest, Author>();
+            CreateMap<AddUpdateAuthorRequest, Author>().ReverseMap();
             //CreateMap<Author, AddAuthorResponse>().ReverseMap();
             CreateMap<AddUpdateBookRequest, Book>();
             

@@ -19,5 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BookStore.BL\BookStore.BL.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="DK-Project.Test"/>
+	</ItemGroup>
 
 </Project>

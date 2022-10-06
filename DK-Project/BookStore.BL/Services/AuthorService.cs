@@ -30,7 +30,8 @@ namespace BookStore.BL.Services
         public async Task<Author?> AddUser(Author user)
         {
             _logger.LogInformation("Adding author");
-            return await _authorRepository.AddUser(user);
+            var result = await _authorRepository.AddUser(user);
+            return result;
         }
 
         public async Task<Author?> DeleteUser(int userId)
