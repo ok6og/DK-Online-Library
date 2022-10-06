@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BookStore.BL.Interfaces;
-using BookStore.BL.Services;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
+using DK_Project.Models.Mediatr.Commands.AuthorCommands;
 using DK_Project.Models.Models;
 using DK_Project.Models.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using IAuthorRepository = DK_Project.DL.Interfaces.IAuthorRepository;
 
 namespace DK_Project.Controllers
 {
@@ -14,17 +16,22 @@ namespace DK_Project.Controllers
     [Route("[controller]")]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorService _authorService;
+        private readonly IAuthorRepository _authorService;
+        private readonly IBookRepository _bookRepository;
         private readonly ILogger<AuthorController> _logger;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
 
 
-        public AuthorController(IAuthorService authorService, ILogger<AuthorController> logger, IMapper mapper)
+
+        public AuthorController(IAuthorRepository authorService, ILogger<AuthorController> logger, IMapper mapper, IMediator mediator, IBookRepository bookRepository)
         {
             _authorService = authorService;
             _logger = logger;
             _mapper = mapper;
+            _mediator = mediator;
+            _bookRepository = bookRepository;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,9 +43,7 @@ namespace DK_Project.Controllers
             _logger.LogError("Error Test");
             _logger.LogCritical("Critical Test");
 
-
-
-            return  Ok( await _authorService.GetAllUsers());
+            return Ok(await _mediator.Send(new GetAllAuthorsCommand()));
         }
 
         [HttpGet("GetByID")]
@@ -56,8 +61,7 @@ namespace DK_Project.Controllers
             {
                 return NotFound("Book Doesn't Exists");
             }
-            return Ok(result);
-
+            return Ok(await _mediator.Send(new GetByIdAuthorCommand(Id)));
         }
 
         [HttpPost("Add")]
@@ -69,8 +73,8 @@ namespace DK_Project.Controllers
             var authorExist = await _authorService.GetAuthorByName(authorRequest.Name);
             if (authorExist != null) return BadRequest("Author Already Exists");
 
-            var author = _mapper.Map<Author>(authorRequest);            
-            return Ok(await _authorService.AddUser(author));
+            var author = _mapper.Map<Author>(authorRequest);
+            return Ok(await _mediator.Send(new AddAuthorCommand(author)));
         }
 
         [HttpPut("Update")]
@@ -83,8 +87,7 @@ namespace DK_Project.Controllers
             if (authorExist == null) return BadRequest("Author Dosen't Exist");
 
             var newAuthor = _mapper.Map<Author>(authorRequest);
-            return Ok(await _authorService.UpdateUser(newAuthor));
-
+            return Ok(await _mediator.Send(new UpdateAuthorCommand(newAuthor)));
         }
 
         [HttpDelete("Delete")]
@@ -94,8 +97,7 @@ namespace DK_Project.Controllers
         {
             var authorExist = await _authorService.GetById(id);
             if (authorExist == null) return BadRequest("Author Doesn't Exists");
-
-            return Ok(await _authorService.DeleteUser(id));
+            return Ok(await _mediator.Send(new DeleteAuthorCommand(id)));
 
         }
 
@@ -110,7 +112,7 @@ namespace DK_Project.Controllers
         [HttpGet("GetAuthorsBooks")]
         public async Task<IActionResult> GetAuthorBooks(int authorId)
         {
-            var authorByName = await _authorService.GetAuthorBooks(authorId);
+            var authorByName = await _bookRepository.GetAuthorBooks(authorId);
             if (authorByName == null) return BadRequest("Author Doesn't Exists");
             return Ok(authorByName);
         }

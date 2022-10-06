@@ -15,6 +15,6 @@ namespace BookStore.BL.Interfaces
         Task<Book?> GetById(int id);
         Task<Book> UpdateBook(Book user);
         Task<Book> GetBookByName(string title);
-
+        Task<bool> DoesAuthorHaveBooks(int authorId);
     }
 }
