@@ -13,18 +13,14 @@ namespace DK_Project.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly IBookRepository _bookService;
-        private readonly ILogger<BookController> _logger;
-        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
 
-        public BookController(IBookRepository bookRepo, ILogger<BookController> logger, IMapper mapper, IMediator mediator)
+        public BookController(IMapper mapper, IMediator mediator)
         {
-            _bookService = bookRepo;
-            _logger = logger;
-            _mapper = mapper;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -44,12 +40,12 @@ namespace DK_Project.Controllers
             {
                 return BadRequest($"Parameter id:{Id} must be greater than 0 or 0");
             }
-            var result = await _bookService.GetById(Id);
+            var result = await _mediator.Send(new GetByIdCommand(Id));
             if (result == null)
             {
                 return NotFound("Book Doesn't Exists");                                                                                                                                
             }
-            return Ok(await _mediator.Send(new GetByIdCommand(Id)));
+            return Ok(result);
         }
 
         [HttpPost("Add")]
@@ -58,7 +54,7 @@ namespace DK_Project.Controllers
         public async Task<IActionResult> Add([FromBody] AddUpdateBookRequest bookRequest)
         {
             if (bookRequest == null) return BadRequest(bookRequest);
-            var bookExist = await _bookService.GetBookByName(bookRequest.Title);
+            var bookExist = await _mediator.Send(new GetBookByNameCommand(bookRequest.Title));
             if (bookExist != null) return BadRequest("Book Already Exists");
 
             var book = _mapper.Map<Book>(bookRequest);
@@ -71,7 +67,7 @@ namespace DK_Project.Controllers
         public async Task<IActionResult> Update([FromBody] AddUpdateBookRequest bookRequest)
         {
             if (bookRequest == null) return BadRequest(bookRequest);
-            var bookExist = await _bookService.GetById(bookRequest.Id);
+            var bookExist = await _mediator.Send(new GetByIdCommand(bookRequest.Id));
             if (bookExist == null) return BadRequest("Book Doesn't Exists");
 
             var book = _mapper.Map<Book>(bookRequest);
@@ -83,7 +79,7 @@ namespace DK_Project.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
-            var bookExist = await _bookService.GetById(id);
+            var bookExist = await _mediator.Send(new GetByIdCommand(id));
             if (bookExist == null) return BadRequest("Book Doesn't Exists");
             return  Ok(await _mediator.Send(new DeleteBookCommand(id)));
         }
