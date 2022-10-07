@@ -1,5 +1,4 @@
-﻿using BookStore.BL.Interfaces;
-using DK_Project.DL.Interfaces;
+﻿using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.DL.Repositories.MsSql;
 

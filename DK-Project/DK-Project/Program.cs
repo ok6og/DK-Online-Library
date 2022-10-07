@@ -1,6 +1,5 @@
 using BookStore.BL.CommandHandlers.AuthorCommandHandlers;
 using BookStore.BL.CommandHandlers.BookCommandHandlers;
-using BookStore.BL.Interfaces;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.Extensions;
@@ -41,12 +40,6 @@ builder.Services.AddHealthChecks()
     .AddUrlGroup(new Uri("https://google.bg"), name:"Google Service");
 
 builder.Services.AddMediatR(typeof(AddAuthorCommandHandler).Assembly);
-
-
-
-
-
-
 
 var app = builder.Build();
 

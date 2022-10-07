@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookStore.BL.Interfaces;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
 using DK_Project.Models.Mediatr.Commands.AuthorCommands;
@@ -21,9 +20,6 @@ namespace DK_Project.Controllers
         private readonly ILogger<AuthorController> _logger;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-
-
-
 
         public AuthorController(IAuthorRepository authorService, ILogger<AuthorController> logger, IMapper mapper, IMediator mediator, IBookRepository bookRepository)
         {
