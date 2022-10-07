@@ -97,6 +97,10 @@ namespace DK_Project.Controllers
         {
             var authorExist = await _authorService.GetById(id);
             if (authorExist == null) return BadRequest("Author Doesn't Exists");
+            if (await _bookRepository.DoesAuthorHaveBooks(id))
+            {
+                return BadRequest("This author has books and can't be deleted.");
+            }
             return Ok(await _mediator.Send(new DeleteAuthorCommand(id)));
 
         }

@@ -14,6 +14,12 @@ namespace BookStore.BL.CommandHandlers.BookCommandHandlers
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Book>
     {
         private readonly IBookRepository _bookRepo;
+
+        public UpdateBookCommandHandler(IBookRepository bookRepo)
+        {
+            _bookRepo = bookRepo;
+        }
+
         public async Task<Book> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
         {
             return await _bookRepo.UpdateBook(request.book);

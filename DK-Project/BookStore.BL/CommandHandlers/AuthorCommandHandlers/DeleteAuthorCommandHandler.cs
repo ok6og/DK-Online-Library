@@ -29,10 +29,6 @@ namespace BookStore.BL.CommandHandlers.AuthorCommandHandlers
 
         public async Task<Author> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
         {
-            if (await _bookRepository.DoesAuthorHaveBooks(request.authorId))
-            {
-                return null;
-            }
             return await _authorRepo.DeleteUser(request.authorId);
         }
     }
