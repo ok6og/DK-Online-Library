@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using BookStore.BL.Interfaces;
-using BookStore.BL.Services;
+using DK_Project.DL.Interfaces;
+using DK_Project.Models.Mediatr.Commands;
+using DK_Project.Models.Mediatr.Commands.BookCommands;
 using DK_Project.Models.Models;
 using DK_Project.Models.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DK_Project.Controllers
@@ -11,15 +13,13 @@ namespace DK_Project.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly IBookService _bookService;
-        private readonly ILogger<BookController> _logger;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
 
-        public BookController(IBookService bookRepo, ILogger<BookController> logger, IMapper mapper)
+        public BookController(IMapper mapper, IMediator mediator)
         {
-            _bookService = bookRepo;
-            _logger = logger;
+            _mediator = mediator;
             _mapper = mapper;
         }
 
@@ -27,7 +27,7 @@ namespace DK_Project.Controllers
         [HttpGet("GetNamesAndId")]
         public async Task <IActionResult> Get()
         {
-            return Ok(await _bookService.GetAllBooks());
+            return Ok(await _mediator.Send(new GetAllBooksCommand()));
         }
 
         [HttpGet("GetByID")]
@@ -40,10 +40,10 @@ namespace DK_Project.Controllers
             {
                 return BadRequest($"Parameter id:{Id} must be greater than 0 or 0");
             }
-            var result = await _bookService.GetById(Id);
+            var result = await _mediator.Send(new GetByIdCommand(Id));
             if (result == null)
             {
-                return NotFound("Book Doesn't Exists");
+                return NotFound("Book Doesn't Exists");                                                                                                                                
             }
             return Ok(result);
         }
@@ -54,11 +54,11 @@ namespace DK_Project.Controllers
         public async Task<IActionResult> Add([FromBody] AddUpdateBookRequest bookRequest)
         {
             if (bookRequest == null) return BadRequest(bookRequest);
-            var bookExist = await _bookService.GetBookByName(bookRequest.Title);
+            var bookExist = await _mediator.Send(new GetBookByNameCommand(bookRequest.Title));
             if (bookExist != null) return BadRequest("Book Already Exists");
 
             var book = _mapper.Map<Book>(bookRequest);
-            return Ok(await _bookService.AddBook(book));
+            return Ok(await _mediator.Send(new AddBookCommand(book)));
         }
 
         [HttpPut("Update")]
@@ -67,11 +67,11 @@ namespace DK_Project.Controllers
         public async Task<IActionResult> Update([FromBody] AddUpdateBookRequest bookRequest)
         {
             if (bookRequest == null) return BadRequest(bookRequest);
-            var bookExist = await _bookService.GetById(bookRequest.Id);
+            var bookExist = await _mediator.Send(new GetByIdCommand(bookRequest.Id));
             if (bookExist == null) return BadRequest("Book Doesn't Exists");
 
             var book = _mapper.Map<Book>(bookRequest);
-            return Ok(await _bookService.UpdateBook(book));
+            return Ok(await _mediator.Send(new UpdateBookCommand(book)));
         }
 
         [HttpDelete("Delete")]
@@ -79,9 +79,9 @@ namespace DK_Project.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
-            var bookExist = await _bookService.GetById(id);
+            var bookExist = await _mediator.Send(new GetByIdCommand(id));
             if (bookExist == null) return BadRequest("Book Doesn't Exists");
-            return Ok(await _bookService.DeleteBook(id));
+            return  Ok(await _mediator.Send(new DeleteBookCommand(id)));
         }
     }
 }

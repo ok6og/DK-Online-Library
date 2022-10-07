@@ -15,6 +15,5 @@ namespace DK_Project.DL.Interfaces
         Task<Author?> GetById(int id);
         Task<Author> UpdateUser(Author user);
         Task<Author> GetAuthorByName(string user);
-        
     }
 }
