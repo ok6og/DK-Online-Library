@@ -46,7 +46,25 @@ namespace DK_Project.DL.Repositories.MsSql
 
         public async Task<bool> CheckEmployee(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+                    var result = await conn.QueryFirstOrDefaultAsync(
+                        @"SELECT * FROM EMPLOYEE WITH(NOLOCK) WHERE EmployeeId = @EmployeeId", new {EmployeeId = id});
+                    if (result == null)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(AddEmployee)}: {ex.Message}", ex);
+            }
+            return true;
         }
 
         public async Task DeleteEmployee(int id)

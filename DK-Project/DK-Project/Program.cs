@@ -1,4 +1,5 @@
 using System.Text;
+using BookStore.BL.Background;
 using BookStore.BL.CommandHandlers.AuthorCommandHandlers;
 using BookStore.BL.CommandHandlers.BookCommandHandlers;
 using DK_Project.DL.Interfaces;
@@ -94,6 +95,7 @@ builder.Services.AddMediatR(typeof(AddAuthorCommandHandler).Assembly);
 builder.Services.AddIdentity<UserInfo, UserRole>()
     .AddUserStore<UserRepository>()
     .AddRoleStore<UserRoleStore>();
+//builder.Services.AddHostedService<MyBackgroundService>();
 
 var app = builder.Build();
 

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DK_Project.Controllers
 {
-    [Authorize(AuthenticationSchemes ="Bearer",Roles ="Admin")]
+    [Authorize(AuthenticationSchemes ="Bearer")]
     [ApiController]
     [Route("[controller]")]
     public class EmployeeController : ControllerBase
