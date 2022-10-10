@@ -4,7 +4,8 @@ using DK_Project.Models.Models;
 namespace DK_Project.DL.Repositories.InMemoryRepositories
 {
 
-    public class PersonRepository : IPersonRepository
+    public class 
+        Repository : IPersonRepository
     {
         private static List<Person> _users = new List<Person>()
         {
@@ -28,10 +29,10 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
             }
         };
 
-        public PersonRepository()
-        {
+        //public PersonRepository()
+        //{
  
-        }
+        //}
 
         public IEnumerable<Person> GetAllUsers()
         {
