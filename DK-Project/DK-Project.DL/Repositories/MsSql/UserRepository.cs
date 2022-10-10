@@ -14,16 +14,23 @@ using Microsoft.Extensions.Logging;
 
 namespace DK_Project.DL.Repositories.MsSql
 {
-    public class UserRepository : IUserRepository,IUserPasswordStore<UserInfo>
+    public class UserRepository : IUserPasswordStore<UserInfo>, IUserRoleStore<UserInfo>
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<AuthorRepository> _logger;
+        private readonly ILogger<UserRepository> _logger;
+        private readonly IPasswordHasher<UserInfo> _passwordHasher;
 
 
-        public UserRepository(IConfiguration configuration, ILogger<AuthorRepository> logger)
+        public UserRepository(IConfiguration configuration, ILogger<UserRepository> logger, IPasswordHasher<UserInfo> passwordHasher)
         {
             _configuration = configuration;
             _logger = logger;
+            _passwordHasher = passwordHasher;
+        }
+
+        public Task AddToRoleAsync(UserInfo user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IdentityResult> CreateAsync(UserInfo user, CancellationToken cancellationToken)
@@ -34,7 +41,8 @@ namespace DK_Project.DL.Repositories.MsSql
                 {
                     await conn.OpenAsync();
                     var query =
-                        @"INSERT INTO [USERINFO] (USERID, DISPLAYNAME, USERNAME, EMAIL, PASSWORD, CREATEDDATE) VALUES(@UserId, @DisplayName, @UserName, @Email, @Password, @CreateDate)";
+                        @"INSERT INTO [USERINFO] (DISPLAYNAME, USERNAME, EMAIL, PASSWORD, CREATEDDATE) VALUES(@DisplayName, @UserName, @Email, @Password, @CreatedDate)";
+                    user.Password = _passwordHasher.HashPassword(user, user.Password);
                     var result = await conn.ExecuteScalarAsync(query, user);
                     return IdentityResult.Success;
                 }
@@ -81,7 +89,7 @@ namespace DK_Project.DL.Repositories.MsSql
                 await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
                     await conn.OpenAsync();
-                    var result = await conn.QueryFirstOrDefaultAsync<UserInfo>("SELECT * FROM USERINFO WITH(NOLOCK) WHERE DISPLAYNAME = @Name", new { Name = normalizedUserName });
+                    var result = await conn.QueryFirstOrDefaultAsync<UserInfo>("SELECT * FROM USERINFO WITH(NOLOCK) WHERE USERNAME = @Name", new { Name = normalizedUserName });
                     return result;
                 }
             }
@@ -97,14 +105,49 @@ namespace DK_Project.DL.Repositories.MsSql
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPasswordHashAsync(UserInfo user, CancellationToken cancellationToken)
+        public async Task<string> GetPasswordHashAsync(UserInfo user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await conn.OpenAsync(cancellationToken);
+
+            return await conn.QueryFirstOrDefaultAsync<string>("SELECT Password FROM USERINFO WITH(NOLOCK) WHERE USERID = @UserId", new { user.UserId });
         }
 
-        public async Task<string> GetUserIdAsync(UserInfo user, CancellationToken cancellationToken)
+        public async Task<IList<string>> GetRolesAsync(UserInfo user, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(user.UserId.ToString());
+            await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    await conn.OpenAsync(cancellationToken);
+                    var result =
+                        await conn.QueryAsync<string>("SELECT r.RoleName FROM Roles r WHERE r.Id IN (SELECT ur.Id FROM UserRoles ur WHERE ur.UserId = @UserId )", new { UserId = user.UserId });
+                    return result.ToList();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error in {nameof(UserRepository.GetRolesAsync)}:{ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+        public async Task<string?> GetUserIdAsync(UserInfo user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await using (var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                {
+                    await conn.OpenAsync();
+                    var result = await conn.QueryFirstOrDefaultAsync<UserInfo>("SELECT * FROM USERINFO WITH(NOLOCK) WHERE UserId = @UserId", new { UserId = user.UserId });
+                    return result?.UserId.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(FindByNameAsync)}: {ex.Message}", ex);
+            }
+            return null;
         }
 
         public async Task<UserInfo?> GetUserInfo(string userName, string password)
@@ -131,7 +174,22 @@ namespace DK_Project.DL.Repositories.MsSql
             return Task.FromResult(user.UserName);
         }
 
-        public Task<bool> HasPasswordAsync(UserInfo user, CancellationToken cancellationToken)
+        public Task<IList<UserInfo>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> HasPasswordAsync(UserInfo user, CancellationToken cancellationToken)
+        {
+            return !string.IsNullOrEmpty(await GetPasswordHashAsync(user, cancellationToken));
+        }
+
+        public Task<bool> IsInRoleAsync(UserInfo user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveFromRoleAsync(UserInfo user, string roleName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -142,9 +200,12 @@ namespace DK_Project.DL.Repositories.MsSql
             return Task.CompletedTask;
         }
 
-        public Task SetPasswordHashAsync(UserInfo user, string passwordHash, CancellationToken cancellationToken)
+        public async Task SetPasswordHashAsync(UserInfo user, string passwordHash, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await conn.OpenAsync(cancellationToken);
+
+            await conn.ExecuteAsync("UPDATE UserInfo SET Password = @PasswordHash WHERE UserId = @userId", new {user.UserId,passwordHash});
         }
 
         public Task SetUserNameAsync(UserInfo user, string userName, CancellationToken cancellationToken)

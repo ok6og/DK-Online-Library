@@ -3,6 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using BookStore.BL.Interfaces;
 using DK_Project.Models.Models.Users;
+using DK_Project.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -10,27 +13,41 @@ namespace DK_Project.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TokenController : ControllerBase
+    public class IdentityController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IEmployeeService _employeeService;
-        private readonly IUserInfoService _userInfoService;
-        public TokenController(IConfiguration configuration, IEmployeeService employeeService, IUserInfoService userInfoService)
+        private readonly IIdentityService _identityService;
+        private readonly RoleManager<UserRole> _roleManager;
+        public IdentityController(IConfiguration configuration, IIdentityService identityService, RoleManager<UserRole> roleManager)
         {
             _configuration = configuration;
-            _employeeService = employeeService;
-            _userInfoService = userInfoService;
+            _identityService = identityService;
+            _roleManager = roleManager;
+        }
+        [AllowAnonymous]
+        [HttpPost(nameof(CreateUser))]
+        public async Task<IActionResult> CreateUser([FromBody] UserInfo user)
+        {
+            if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest($"Username or password is missing");
+            }
+            var result = await _identityService.CreateAsync(user);
+            return result.Succeeded ? Ok(result) : BadRequest(result);
+
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Post(UserInfo userData)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            if (userData != null && !string.IsNullOrEmpty(userData.Email)&&!string.IsNullOrEmpty(userData.Password))
+            if (loginRequest != null && !string.IsNullOrEmpty(loginRequest.UserName)&&!string.IsNullOrEmpty(loginRequest.Password))
             {
-                var user = await _userInfoService.GetUserInfoAsync(userData.Email,userData.Password);
+                var user = await _identityService.CheckUserAndPassword(loginRequest.UserName, loginRequest.Password);
                 if (user != null)
                 {
-                    var claims = new[]
+                    var userRoles = await _identityService.GetUserRoles(user);
+                    var claims = new List<Claim>
                     {
                         new Claim(JwtRegisteredClaimNames.Sub,_configuration.GetSection("Jwt:Subject").Value),
                         new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
@@ -39,7 +56,15 @@ namespace DK_Project.Controllers
                         new Claim("DisplayName",user.DisplayName??string.Empty),
                         new Claim("UserName",user.UserName??string.Empty),
                         new Claim("Email",user.Email??string.Empty),
+                        new Claim("Admin", "Admin")
                     };
+
+                    foreach (var role in userRoles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                     var signIn = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
@@ -50,14 +75,11 @@ namespace DK_Project.Controllers
                 {
                     return BadRequest("Invalid credentials");
                 }
-
             }
             else
             {
                 return BadRequest("Username or password is missing");
             }
-
-
         } 
 
     }

@@ -3,11 +3,13 @@ using BookStore.BL.CommandHandlers.AuthorCommandHandlers;
 using BookStore.BL.CommandHandlers.BookCommandHandlers;
 using DK_Project.DL.Interfaces;
 using DK_Project.DL.Repositories.InMemoryRepositories;
+using DK_Project.DL.Repositories.MsSql;
 using DK_Project.Extensions;
 using DK_Project.HealthChecks;
 using DK_Project.Middleware;
 using DK_Project.Models.Mediatr.Commands;
 using DK_Project.Models.Mediatr.Commands.AuthorCommands;
+using DK_Project.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -59,6 +61,14 @@ builder.Services.AddSwaggerGen(x =>
         { jwtSecurityScheme, Array.Empty<string>()}
     });
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireClaim("Admin");
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -81,6 +91,9 @@ builder.Services.AddHealthChecks()
     .AddUrlGroup(new Uri("https://google.bg"), name:"Google Service");
 
 builder.Services.AddMediatR(typeof(AddAuthorCommandHandler).Assembly);
+builder.Services.AddIdentity<UserInfo, UserRole>()
+    .AddUserStore<UserRepository>()
+    .AddRoleStore<UserRoleStore>();
 
 var app = builder.Build();
 

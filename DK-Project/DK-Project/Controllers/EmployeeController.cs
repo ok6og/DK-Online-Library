@@ -9,18 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DK_Project.Controllers
 {
-    [Authorize(AuthenticationSchemes ="Bearer")]
+    [Authorize(AuthenticationSchemes ="Bearer",Roles ="Admin")]
     [ApiController]
     [Route("[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly IUserInfoService _userInfoService;
         private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeService employeeService, IUserInfoService userInfoService)
+        public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
-            _userInfoService = userInfoService;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

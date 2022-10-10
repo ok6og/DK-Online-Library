@@ -10,14 +10,11 @@ namespace DK_Project.Extensions
     {
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            //services.AddSingleton<IPersonRepository, PersonRepository>();
             services.AddSingleton<IEmployeesRepository, EmployeeRepository>();
-            services.AddSingleton<IUserRepository,UserRepository>();
             services.AddSingleton<IAuthorRepository, AuthorRepository>();
             services.AddSingleton<IBookRepository, BookRepository>();
-
             services.AddSingleton<IEmployeeService, UserInfoEmployeeService>();
-            services.AddSingleton<IUserInfoService, UserInfoEmployeeService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
             return services;
         }

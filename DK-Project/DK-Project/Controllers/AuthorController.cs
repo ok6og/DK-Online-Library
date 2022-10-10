@@ -6,6 +6,7 @@ using DK_Project.Models.Mediatr.Commands.BookCommands;
 using DK_Project.Models.Models;
 using DK_Project.Models.Requests;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using IAuthorRepository = DK_Project.DL.Interfaces.IAuthorRepository;
@@ -27,6 +28,8 @@ namespace DK_Project.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetNamesAndId")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+
         public async Task<IActionResult> Get()
         {
             return Ok(await _mediator.Send(new GetAllAuthorsCommand()));

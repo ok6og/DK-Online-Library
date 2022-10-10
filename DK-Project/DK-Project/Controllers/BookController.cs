@@ -5,10 +5,12 @@ using DK_Project.Models.Mediatr.Commands.BookCommands;
 using DK_Project.Models.Models;
 using DK_Project.Models.Requests;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DK_Project.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
     [ApiController]
     [Route("[controller]")]
     public class BookController : ControllerBase
@@ -22,7 +24,6 @@ namespace DK_Project.Controllers
             _mediator = mediator;
             _mapper = mapper;
         }
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetNamesAndId")]
         public async Task <IActionResult> Get()

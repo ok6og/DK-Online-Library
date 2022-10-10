@@ -10,15 +10,13 @@ using DK_Project.Models.Models.Users;
 
 namespace BookStore.BL.Services
 {
-    public class UserInfoEmployeeService : IUserInfoService, IEmployeeService
+    public class UserInfoEmployeeService : IEmployeeService
     {
-        public readonly IUserRepository _userInfoRepo;
         public readonly IEmployeesRepository _employeeRepo;
 
-        public UserInfoEmployeeService(IEmployeesRepository employeeService, IUserRepository userInfoService)
+        public UserInfoEmployeeService(IEmployeesRepository employeeService)
         {
             _employeeRepo = employeeService;
-            _userInfoRepo = userInfoService;
         }
 
         public Task AddEmployee(Employee employee)
@@ -44,11 +42,6 @@ namespace BookStore.BL.Services
         public Task<Employee?> GetEmployeeDetails(int id)
         {
             return _employeeRepo.GetEmployeeDetails(id);
-        }
-
-        public Task<UserInfo?> GetUserInfoAsync(string email, string password)
-        {
-            return  _userInfoRepo.GetUserInfo(email, password);
         }
 
         public Task UpdateEmployee(Employee employee)
