@@ -19,34 +19,34 @@ namespace BookStore.BL.Services
             _employeeRepo = employeeService;
         }
 
-        public Task AddEmployee(Employee employee)
+        public async Task AddEmployee(Employee employee)
         {
-            return _employeeRepo.AddEmployee(employee);
+            await _employeeRepo.AddEmployee(employee);
         }
 
-        public Task<bool> CheckEmployee(int id)
+        public async Task<bool> CheckEmployee(int id)
         {
-            return _employeeRepo.CheckEmployee(id);
+            return await _employeeRepo.CheckEmployee(id);
         }
 
-        public Task DeleteEmployee(int id)
+        public async Task DeleteEmployee(int id)
         {
-            return _employeeRepo.DeleteEmployee(id);
+            await _employeeRepo.DeleteEmployee(id);
         }
 
-        public Task<IEnumerable<Employee>> GetEmployeeDetails()
+        public async Task<IEnumerable<Employee>> GetEmployeeDetails()
         {
-            return _employeeRepo.GetEmployeeDetails();
+            return await _employeeRepo.GetEmployeeDetails();
         }
 
-        public Task<Employee?> GetEmployeeDetails(int id)
+        public async Task<Employee?> GetEmployeeDetails(int id)
         {
-            return _employeeRepo.GetEmployeeDetails(id);
+            return await _employeeRepo.GetEmployeeDetails(id);
         }
 
-        public Task UpdateEmployee(Employee employee)
+        public async Task UpdateEmployee(Employee employee)
         {
-            return _employeeRepo.UpdateEmployee(employee);
+            await _employeeRepo.UpdateEmployee(employee);
         }
     }
 
