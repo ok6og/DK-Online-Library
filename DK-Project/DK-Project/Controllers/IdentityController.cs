@@ -2,11 +2,13 @@
 using System.Security.Claims;
 using System.Text;
 using BookStore.BL.Interfaces;
+using DK_Project.Models.Configurations;
 using DK_Project.Models.Models.Users;
 using DK_Project.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DK_Project.Controllers
@@ -18,11 +20,13 @@ namespace DK_Project.Controllers
         private readonly IConfiguration _configuration;
         private readonly IIdentityService _identityService;
         private readonly RoleManager<UserRole> _roleManager;
-        public IdentityController(IConfiguration configuration, IIdentityService identityService, RoleManager<UserRole> roleManager)
+        private readonly IOptions<MyJsonSettings> _jsonSettings;
+        public IdentityController(IConfiguration configuration, IIdentityService identityService, RoleManager<UserRole> roleManager, IOptions<MyJsonSettings> jsonSettings)
         {
             _configuration = configuration;
             _identityService = identityService;
             _roleManager = roleManager;
+            _jsonSettings = jsonSettings;
         }
         [AllowAnonymous]
         [HttpPost(nameof(CreateUser))]

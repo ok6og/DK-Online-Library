@@ -7,6 +7,7 @@ using DK_Project.DL.Repositories.MsSql;
 using DK_Project.Extensions;
 using DK_Project.HealthChecks;
 using DK_Project.Middleware;
+using DK_Project.Models.Configurations;
 using DK_Project.Models.Mediatr.Commands;
 using DK_Project.Models.Mediatr.Commands.AuthorCommands;
 using DK_Project.Models.Models.Users;
@@ -26,6 +27,13 @@ var logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddSerilog(logger);
+
+builder.Services.Configure<MyJsonSettings>(
+    builder.Configuration.GetSection(nameof(MyJsonSettings)));
+builder.Services.Configure<MyKafkaSettings>(
+    builder.Configuration.GetSection(nameof(MyKafkaSettings)));
+
+
 
 // Add services to the container.
 

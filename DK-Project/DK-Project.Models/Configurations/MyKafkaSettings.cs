@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DK_Project.Models.Configurations
+{
+    public class MyKafkaSettings
+    {
+        public string BootstrapServers { get; set; }
+        public int AutoOffsetReset { get; set; }
+        public string GroupId { get; set; }
+        public string Topic { get; set; }
+    }
+}

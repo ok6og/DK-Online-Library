@@ -1,5 +1,8 @@
-﻿namespace DK_Project.Models.Models
+﻿using MessagePack;
+
+namespace DK_Project.Models.Models
 {
+    [MessagePackObject]
     public record Person
     {
         public int Id { get; set; }
