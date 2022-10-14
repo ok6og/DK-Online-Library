@@ -32,6 +32,8 @@ builder.Services.Configure<MyJsonSettings>(
     builder.Configuration.GetSection(nameof(MyJsonSettings)));
 builder.Services.Configure<MyKafkaSettings>(
     builder.Configuration.GetSection(nameof(MyKafkaSettings)));
+builder.Services.Configure<List<MyKafkaSettings>>(
+    builder.Configuration.GetSection(nameof(MyKafkaSettings)));
 
 
 

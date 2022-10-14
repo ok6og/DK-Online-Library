@@ -12,5 +12,6 @@ namespace DK_Project.Models.Configurations
         public int AutoOffsetReset { get; set; }
         public string GroupId { get; set; }
         public string Topic { get; set; }
+        public string objectType { get; set; }
     }
 }

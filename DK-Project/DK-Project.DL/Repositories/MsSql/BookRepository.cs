@@ -33,7 +33,7 @@ namespace DK_Project.DL.Repositories.MsSql
                 {
                     await conn.OpenAsync();
                     var result = await conn.ExecuteScalarAsync("INSERT INTO [Books] (AUTHORID, TITLE, LASTUPDATED, PRICE,QUANTITY) VALUES (@AuthorId, @Title, @LastUpdated, @Price,@Quantity)",
-                        new { Title = book.Title, AuthorId = book.AuthorId, LastUpdated = book.LastUpdated, Price = book.Price, Quantity = book.Quantity });
+                        new { Title = book.Title, AuthorId = book.AuthorId, LastUpdated = DateTime.Now, Price = book.Price, Quantity = book.Quantity });
                     return book;
                 }
             }
