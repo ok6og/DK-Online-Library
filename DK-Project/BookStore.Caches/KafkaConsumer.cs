@@ -43,10 +43,8 @@ namespace BookStore.BL.Kafka
         public async void ConsumeValues()
         {
             var cr = _consumer.Consume();
-            
             var value = cr.Message.Value;
             values.Add(value);
-            Console.WriteLine($"CONSUMED: {value}");
         }
     }
 }

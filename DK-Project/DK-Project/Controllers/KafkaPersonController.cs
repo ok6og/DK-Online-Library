@@ -13,20 +13,12 @@ namespace DK_Project.Controllers
     {
         private readonly KafkaProducer<int, Book> _kafkaProducer;
         private readonly IOptionsMonitor<List<MyKafkaSettings>> _kafkaSettings;
-
         private readonly KafkaConsumer<int,Book> _kafkaConsumer;
-
-
-
-
         public KafkaPersonController(IOptionsMonitor<List<MyKafkaSettings>> kafkaSettings, KafkaProducer<int, Book> kafkaProducer, KafkaConsumer<int, Book> kafkaConsumer)
         {
             _kafkaSettings = kafkaSettings;
             _kafkaProducer = kafkaProducer;
             _kafkaConsumer = kafkaConsumer;
-            //_kafkaSettings = kafkaSettings;
-            //_kafkaProducer = new KafkaProducer<int, Book>(_kafkaSettings);
-            //_kafkaConsumer = new KafkaConsumer<int, Book>(_kafkaSettings);
         }
 
         [AllowAnonymous]
@@ -36,15 +28,11 @@ namespace DK_Project.Controllers
             _kafkaProducer.Produce(kay, person);
             await Task.CompletedTask;
         }
-
         [AllowAnonymous]
         [HttpPost(nameof(Consume))]
         public async  Task<IActionResult> Consume()
         {
             return Ok(_kafkaConsumer.GetAll());
         }
-
-
-
     }
 }

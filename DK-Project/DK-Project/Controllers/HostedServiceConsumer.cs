@@ -23,10 +23,7 @@ namespace DK_Project.Controllers
                 }
             },cancellationToken);
             return Task.CompletedTask;
-
-
         }
-
         public Task StopAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
