@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DK_Project.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
     [ApiController]
     [Route("[controller]")]
     public class BookController : ControllerBase

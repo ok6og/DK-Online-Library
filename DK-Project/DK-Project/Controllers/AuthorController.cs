@@ -28,7 +28,6 @@ namespace DK_Project.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetNamesAndId")]
-        [Authorize(AuthenticationSchemes = "Admin")]
 
         public async Task<IActionResult> Get()
         {
