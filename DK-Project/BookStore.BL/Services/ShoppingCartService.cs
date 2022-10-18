@@ -14,9 +14,8 @@ namespace BookStore.BL.Services
     {
         private readonly IBookRepository _bookRepository;
         private readonly IShoppingCartRepo _shoppingCartRepo;
-        List<Purchase> _listPurchase = new List<Purchase>();
 
-        public ShoppingCartService(IBookRepository bookRepository, IPurchaseRepository purchaseRepository, IShoppingCartRepo shoppingCartRepo)
+        public ShoppingCartService(IBookRepository bookRepository, IShoppingCartRepo shoppingCartRepo)
         {
             _bookRepository = bookRepository;
             _shoppingCartRepo = shoppingCartRepo;

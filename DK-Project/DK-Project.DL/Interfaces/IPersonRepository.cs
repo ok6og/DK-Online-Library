@@ -9,6 +9,5 @@ namespace DK_Project.DL.Repositories.InMemoryRepositories
         IEnumerable<Person> GetAllUsers();
         Person? GetById(int id);
         Person UpdateUser(Person user);
-
     }
 }

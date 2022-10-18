@@ -18,7 +18,6 @@ namespace DK_Project.Controllers
             _purchaseRepository = purchaseRepository;
         }
 
-
         [HttpGet("Get")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get(int userId)
