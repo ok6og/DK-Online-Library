@@ -10,6 +10,7 @@ using DK_Project.Middleware;
 using DK_Project.Models.Configurations;
 using DK_Project.Models.Mediatr.Commands;
 using DK_Project.Models.Mediatr.Commands.AuthorCommands;
+using DK_Project.Models.Models;
 using DK_Project.Models.Models.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -17,6 +18,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -34,6 +38,8 @@ builder.Services.Configure<MyKafkaSettings>(
     builder.Configuration.GetSection(nameof(MyKafkaSettings)));
 builder.Services.Configure<List<MyKafkaSettings>>(
     builder.Configuration.GetSection(nameof(MyKafkaSettings)));
+builder.Services.Configure<MongoDbModel>(
+    builder.Configuration.GetSection(nameof(MongoDbModel)));
 
 
 
