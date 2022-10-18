@@ -21,7 +21,6 @@ namespace BookStore.BL.Services
             _bookRepository = bookRepository;
             _shoppingCartRepo = shoppingCartRepo;
         }
-
         public async Task<ShoppingCart?> AddToCart(int userId, int bookId)
         {
             var book =await _bookRepository.GetById(bookId);
@@ -53,61 +52,25 @@ namespace BookStore.BL.Services
             };
             _shoppingCartRepo.AddCart(purchase);
             return purchase;
-           
         }
-
         public async Task EmptyCart(int userId)
         {
             await _shoppingCartRepo.EmptyCart(userId);
-            //var empty = _listPurchase.FirstOrDefault(x => x.UserId == userId);
-            //if (empty == null)
-            //{
-            //    return;
-            //}
-            //empty.TotalMoney = 0;
-            //empty.Books.Clear();
         }
-
         public async Task FinishPurchase(int userId)
         {
             await _shoppingCartRepo.FinishPurchase(userId);
-
-            //var finishedPurchase = _listPurchase.FirstOrDefault(x => x.UserId == userId);
-            //if (finishedPurchase == null)
-            //{
-            //    return;
-            //}
-            //await _purchaseRepository.SavePurchase(finishedPurchase);
-            //_listPurchase.Remove(finishedPurchase);
+            await _shoppingCartRepo.RemoveCart(userId);
         }
-
         public async Task<IEnumerable<ShoppingCart>> GetContent(int userId)
         {
             var content = await _shoppingCartRepo.GetContent(userId);
             return content;
-            //await _shoppingCartRepo.FinishPurchase(userId);
-            //var content = _listPurchase.FirstOrDefault(x => x.UserId == userId).Books;
-            //if (content == null)
-            //{
-            //    return Enumerable.Empty<Book>();
-            //}
-            //return content;
         }
-
         public async Task<Book?> RemoveFromCart(int userId, int bookId)
         {
             var book = await _shoppingCartRepo.RemoveFromCart(userId, bookId);
             return book;
-            //var user = _listPurchase.FirstOrDefault(x => x.UserId == userId);
-            //var book1 = user.Books.FirstOrDefault(x => x.Id == bookId);
-            //if (book1 == null || user == null)
-            //{
-            //    return null;
-            //}
-            //user.Books.Remove(book1);
-            //return book1;
         }
-
- 
     }
 }

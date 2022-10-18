@@ -14,6 +14,5 @@ namespace BookStore.BL.Interfaces
         public Task<Book> RemoveFromCart(int userId,int bookId);
         public Task EmptyCart(int userId);
         public Task FinishPurchase(int userId);
- 
     }
 }

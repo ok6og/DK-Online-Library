@@ -15,10 +15,6 @@ namespace DK_Project.DL.Interfaces
         public Task<IEnumerable<ShoppingCart>> GetContent(int userId);
         public Task<Book?> RemoveFromCart(int userId, int bookId);
         public Task<ShoppingCart> GetShoppingCart(int userId);
-        //public Task<ShoppingCart?> AddToCart(int bookId, int userId);
         public Task RemoveCart(int userId);
-
-
-
     }
 }
