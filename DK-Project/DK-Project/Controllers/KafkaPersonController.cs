@@ -28,11 +28,5 @@ namespace DK_Project.Controllers
             _kafkaProducer.Produce(kay, person);
             await Task.CompletedTask;
         }
-        //[AllowAnonymous]
-        //[HttpPost(nameof(Consume))]
-        //public async  Task<IActionResult> Consume()
-        //{
-        //    return Ok(_kafkaConsumer.GetAll());
-        //}
     }
 }
