@@ -21,14 +21,19 @@ namespace DK_Project.Extensions
             services.AddSingleton<IBookRepository, BookRepository>();
             services.AddSingleton<IEmployeeService, UserInfoEmployeeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddSingleton<KafkaConsumer<int, Book>>();
+            //services.AddSingleton<KafkaConsumer<int, Book>>();
             services.AddSingleton<KafkaProducer<int, Book>>();
-            services.AddHostedService<HostedServiceConsumer<int, Book>>();
+            //services.AddSingleton<KafkaConsumer<int, Delivery>>();
+            //services.AddHostedService<HostedServiceConsumer<int, Book>>();
+            services.AddHostedService<HostedServiceDeliveryConsumer>();
             services.AddSingleton<IPurchaseRepository, PurchaseRepository>();
             services.AddSingleton<IPurchaseService, PurchaseService>();
             services.AddSingleton<IShoppingCartService, ShoppingCartService>();
             services.AddSingleton<IShoppingCartRepo, ShoppingCartRepo>();
             services.AddSingleton<IShoppingCartService, ShoppingCartService>();
+            services.AddSingleton<IDeliveryQuantityService, DeliveryQuantityService>();
+            services.AddSingleton<IPurchaseQuantityService, PurchaseQuantityService>();
+
             return services;
         }
     }
