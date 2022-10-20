@@ -12,13 +12,12 @@ using Microsoft.Extensions.Options;
 
 namespace BookStore.BL.Kafka
 {
-    public class KafkaConsumer<TKey, TValue>
+    public abstract class KafkaConsumer<TKey, TValue>
     {
-        private readonly IOptionsMonitor<List<MyKafkaSettings>> _kafkaSettings;
+        public readonly IOptionsMonitor<List<MyKafkaSettings>> _kafkaSettings;
         private readonly MyKafkaSettings _thisKafkaSettings;
         private readonly ConsumerConfig _config;
-        private readonly IConsumer<TKey, TValue> _consumer;
-        public List<TValue> values;
+        protected readonly IConsumer<TKey, TValue> _consumer;
 
         public KafkaConsumer(IOptionsMonitor<List<MyKafkaSettings>> kafkaSettings)
         {
@@ -32,19 +31,31 @@ namespace BookStore.BL.Kafka
 
             };
             _consumer = new ConsumerBuilder<TKey, TValue>(_config)
-                .SetValueDeserializer(new MsgPackDeserializer<TValue>()).Build();
+                .SetValueDeserializer(new MsgPackDeserializer<TValue>())
+                .SetKeyDeserializer(new MsgPackDeserializer<TKey>()).Build();
             _consumer.Subscribe(_thisKafkaSettings.Topic);
-            values = new List<TValue>();
         }
-        public List<TValue> GetAll()
+        public Task ConsumeValues(CancellationToken cancellationToken)
         {
-            return values;
+            Task.Run(() =>
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var value = _consumer.Consume();
+                        var objectValue = value.Value;
+                        HandleMesseges(objectValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                   
+                }
+            },cancellationToken);
+            return Task.CompletedTask;
         }
-        public async void ConsumeValues()
-        {
-            var cr = _consumer.Consume();
-            var value = cr.Message.Value;
-            values.Add(value);
-        }
+        public abstract Task HandleMesseges(TValue value);
     }
 }

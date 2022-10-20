@@ -66,6 +66,8 @@ namespace DK_Project.DL.Repositories.MongoDbRepo
             var shoppingCart = await GetShoppingCart(userId);
             var bookToRemove = shoppingCart.Books.FirstOrDefault(x=>x.Id == bookId);
             shoppingCart.Books.Remove(bookToRemove);
+            await _collection.ReplaceOneAsync(x => x.UserId == userId, shoppingCart);
+
             return bookToRemove;
         }
         public async Task RemoveCart(int userId)
